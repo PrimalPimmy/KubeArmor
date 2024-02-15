@@ -100,6 +100,7 @@ jobs:
            if [ ${{ steps.vars.outputs.tag }} == v*]; then
              sed -i '/image: kubearmor\/kubearmor-controller:latest/!s/latest/${{ steps.vars.outputs.tag }}/g' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
            fi
+           cat pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl apply -f pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl wait -n kubearmor --timeout=5m --for=jsonpath='{.status.phase}'=Running kubearmorconfigs/kubearmorconfig-test
           sleep 20
