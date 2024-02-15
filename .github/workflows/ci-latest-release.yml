@@ -22,7 +22,7 @@ permissions: read-all
 jobs:
   check:
     name: Check what pkg were updated
-    if: github.repository == 'kubearmor/kubearmor'
+    if: github.repository == 'primalpimmy/kubearmor'
     runs-on: ubuntu-20.04
     timeout-minutes: 5
     outputs:
@@ -43,7 +43,7 @@ jobs:
   build:
     name: Create KubeArmor latest release
     needs: check
-    if: github.repository == 'kubearmor/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
+    if: github.repository == 'primalpimmy/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
     runs-on: ubuntu-20.04
     permissions:
       id-token: write 
