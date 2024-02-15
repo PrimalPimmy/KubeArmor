@@ -98,7 +98,7 @@ jobs:
           kubectl wait --for=condition=ready --timeout=5m -n kubearmor pod -l kubearmor-app=kubearmor-operator
           kubectl get pods -A
            if [[ ${{ steps.vars.outputs.tag }} == v* ]]; then
-             sed -i '/image: kubearmor\/kubearmor-controller:latest/!s/latest/${{ steps.vars.outputs.tag }}/g' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
+             sed -i '/image: kubearmor\/kubearmor-controller:latest/!{/image: kubearmor\/kubearmor-relay-server:latest/!s/latest/version/g}' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
            fi
            cat pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl apply -f pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
