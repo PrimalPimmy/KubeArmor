@@ -100,6 +100,8 @@ jobs:
           sed -i '/image: kubearmor\/kubearmor-controller:latest/!s/latest/${{ steps.vars.outputs.tag }}/g' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl apply -f pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl wait -n kubearmor --timeout=5m --for=jsonpath='{.status.phase}'=Running kubearmorconfigs/kubearmorconfig-test
+          sleep 20
+          kubectl get pods -A
           kubectl wait --timeout=5m --for=condition=ready pod -l kubearmor-app,kubearmor-app!=kubearmor-snitch -n kubearmor
           kubectl get pods -A
 
