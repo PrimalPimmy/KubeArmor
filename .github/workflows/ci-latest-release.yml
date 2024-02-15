@@ -97,7 +97,7 @@ jobs:
           helm upgrade --install kubearmor-operator ./deployments/helm/KubeArmorOperator -n kubearmor --create-namespace
           kubectl wait --for=condition=ready --timeout=5m -n kubearmor pod -l kubearmor-app=kubearmor-operator
           kubectl get pods -A
-           if [ ${{ steps.vars.outputs.tag }} == v*]; then
+           if [[ ${{ steps.vars.outputs.tag }} == v* ]]; then
              sed -i '/image: kubearmor\/kubearmor-controller:latest/!s/latest/${{ steps.vars.outputs.tag }}/g' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
            fi
            cat pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
