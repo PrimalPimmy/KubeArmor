@@ -43,7 +43,7 @@ jobs:
   build:
     name: Create KubeArmor latest release
     needs: check
-    if: github.repository == 'kubearmor/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
+    if: github.repository == 'primalpimmy/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
     runs-on: ubuntu-20.04
     permissions:
       id-token: write 
@@ -79,7 +79,7 @@ jobs:
       - name: Build Kubearmor-Operator
         working-directory: pkg/KubeArmorOperator
         run: |
-          make docker-buildx TAG=${{ steps.tag.outputs.tag }}
+          make docker-buildx TAG=${{ steps.vars.outputs.tag }}
 
       - name: deploy pre existing pod 
         run: |
