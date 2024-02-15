@@ -79,7 +79,7 @@ jobs:
       - name: Build Kubearmor-Operator
         working-directory: pkg/KubeArmorOperator
         run: |
-          make docker-build
+          make docker-buildx TAG=${{ steps.tag.outputs.tag }}
 
       - name: deploy pre existing pod 
         run: |
