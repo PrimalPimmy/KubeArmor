@@ -22,7 +22,7 @@ permissions: read-all
 jobs:
   check:
     name: Check what pkg were updated
-    if: github.repository == 'primalpimmy/kubearmor'
+    if: github.repository == 'kubearmor/kubearmor'
     runs-on: ubuntu-20.04
     timeout-minutes: 5
     outputs:
@@ -43,7 +43,7 @@ jobs:
   build:
     name: Create KubeArmor latest release
     needs: check
-    if: github.repository == 'primalpimmy/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
+    if: github.repository == 'kubearmor/kubearmor' && (needs.check.outputs.kubearmor == 'true' || ${{ github.ref }} != 'refs/heads/main')
     runs-on: ubuntu-20.04
     permissions:
       id-token: write 
@@ -97,14 +97,11 @@ jobs:
           helm upgrade --install kubearmor-operator ./deployments/helm/KubeArmorOperator -n kubearmor --create-namespace
           kubectl wait --for=condition=ready --timeout=5m -n kubearmor pod -l kubearmor-app=kubearmor-operator
           kubectl get pods -A
-           if [[ ${{ steps.vars.outputs.tag }} == v* ]]; then
-             sed -i '/image: kubearmor\/kubearmor-controller:latest/!{/image: kubearmor\/kubearmor-relay-server:latest/!s/latest/${{ steps.vars.outputs.tag }}/g}' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
-           fi
-           cat pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
+          if [[ ${{ steps.vars.outputs.tag }} == v* ]]; then
+            sed -i '/image: kubearmor\/kubearmor-controller:latest/!{/image: kubearmor\/kubearmor-relay-server:latest/!s/latest/${{ steps.vars.outputs.tag }}/g}' pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
+          fi
           kubectl apply -f pkg/KubeArmorOperator/config/samples/kubearmor-test.yaml
           kubectl wait -n kubearmor --timeout=5m --for=jsonpath='{.status.phase}'=Running kubearmorconfigs/kubearmorconfig-test
-          sleep 20
-          kubectl get pods -A
           kubectl wait --timeout=5m --for=condition=ready pod -l kubearmor-app,kubearmor-app!=kubearmor-snitch -n kubearmor
           kubectl get pods -A
 
